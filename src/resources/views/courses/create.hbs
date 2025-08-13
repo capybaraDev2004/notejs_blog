@@ -1,0 +1,121 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Tạo khóa học mới
+                </h4>
+            </div>
+            <div class="card-body">
+                {{#if error}}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{error}}
+                    </div>
+                {{/if}}
+                
+                <form action="/courses" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-book me-1"></i>Tên khóa học <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" 
+                                       id="name" name="name" value="{{data.name}}" required 
+                                       placeholder="Nhập tên khóa học...">
+                                <div class="invalid-feedback">
+                                    Tên khóa học là bắt buộc
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">
+                                    <i class="fas fa-align-left me-1"></i>Mô tả <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control {{#if error}}is-invalid{{/if}}" 
+                                          id="description" name="description" rows="4" required 
+                                          placeholder="Nhập mô tả khóa học...">{{data.description}}</textarea>
+                                <div class="invalid-feedback">
+                                    Mô tả khóa học là bắt buộc
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">
+                                            <i class="fas fa-money-bill me-1"></i>Giá (VNĐ)
+                                        </label>
+                                        <input type="number" class="form-control" id="price" name="price" 
+                                               value="{{data.price}}" min="0" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="duration" class="form-label">
+                                            <i class="fas fa-clock me-1"></i>Thời lượng (giờ)
+                                        </label>
+                                        <input type="number" class="form-control" id="duration" name="duration" 
+                                               value="{{data.duration}}" min="0" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">
+                                    <i class="fas fa-tags me-1"></i>Danh mục
+                                </label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="programming" {{#if (eq data.category 'programming')}}selected{{/if}}>Lập trình</option>
+                                    <option value="design" {{#if (eq data.category 'design')}}selected{{/if}}>Thiết kế</option>
+                                    <option value="business" {{#if (eq data.category 'business')}}selected{{/if}}>Kinh doanh</option>
+                                    <option value="marketing" {{#if (eq data.category 'marketing')}}selected{{/if}}>Marketing</option>
+                                    <option value="other" {{#if (eq data.category 'other')}}selected{{/if}}>Khác</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="level" class="form-label">
+                                    <i class="fas fa-signal me-1"></i>Cấp độ
+                                </label>
+                                <select class="form-select" id="level" name="level">
+                                    <option value="beginner" {{#if (eq data.level 'beginner')}}selected{{/if}}>Cơ bản</option>
+                                    <option value="intermediate" {{#if (eq data.level 'intermediate')}}selected{{/if}}>Trung cấp</option>
+                                    <option value="advanced" {{#if (eq data.level 'advanced')}}selected{{/if}}>Nâng cao</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="instructor" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Giảng viên
+                                </label>
+                                <input type="text" class="form-control" id="instructor" name="instructor" 
+                                       value="{{data.instructor}}" placeholder="Tên giảng viên...">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="image" class="form-label">
+                                    <i class="fas fa-image me-1"></i>Hình ảnh
+                                </label>
+                                <input type="file" class="form-control" id="image" name="image" 
+                                       accept="image/*">
+                                <div class="form-text">Chọn hình ảnh cho khóa học</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/courses" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Lưu khóa học
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

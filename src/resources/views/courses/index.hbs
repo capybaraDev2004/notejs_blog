@@ -1,0 +1,191 @@
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-book me-2"></i>Danh sách khóa học</h2>
+            <a href="/courses/create" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Tạo khóa học mới
+            </a>
+        </div>
+        
+        <!-- Bộ lọc -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="GET" action="/courses" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Tìm kiếm</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{search}}" placeholder="Nhập tên khóa học...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="category" class="form-label">Danh mục</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="all" {{#if (eq category 'all')}}selected{{/if}}>Tất cả</option>
+                            <option value="programming" {{#if (eq category 'programming')}}selected{{/if}}>Lập trình</option>
+                            <option value="design" {{#if (eq category 'design')}}selected{{/if}}>Thiết kế</option>
+                            <option value="business" {{#if (eq category 'business')}}selected{{/if}}>Kinh doanh</option>
+                            <option value="marketing" {{#if (eq category 'marketing')}}selected{{/if}}>Marketing</option>
+                            <option value="other" {{#if (eq category 'other')}}selected{{/if}}>Khác</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="level" class="form-label">Cấp độ</label>
+                        <select class="form-select" id="level" name="level">
+                            <option value="all" {{#if (eq level 'all')}}selected{{/if}}>Tất cả</option>
+                            <option value="beginner" {{#if (eq level 'beginner')}}selected{{/if}}>Cơ bản</option>
+                            <option value="intermediate" {{#if (eq level 'intermediate')}}selected{{/if}}>Trung cấp</option>
+                            <option value="advanced" {{#if (eq level 'advanced')}}selected{{/if}}>Nâng cao</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-1"></i>Lọc
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Thống kê -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-title">Tổng khóa học</h6>
+                                <h3 class="mb-0">{{total}}</h3>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-book fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Danh sách khóa học -->
+        {{#if courses.length}}
+            <div class="row">
+                {{#each courses}}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{image}}" class="card-img-top" alt="{{name}}" 
+                                 style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{name}}</h5>
+                                <p class="card-text text-muted">{{description}}</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-{{#if (eq category 'programming')}}primary{{else if (eq category 'design')}}success{{else if (eq category 'business')}}warning{{else if (eq category 'marketing')}}info{{else}}secondary{{/if}}">
+                                        {{category}}
+                                    </span>
+                                    <span class="badge bg-{{#if (eq level 'beginner')}}success{{else if (eq level 'intermediate')}}warning{{else}}danger{{/if}}">
+                                        {{level}}
+                                    </span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>{{duration}} giờ
+                                    </small>
+                                    <strong class="text-primary">{{price}} VNĐ</strong>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <a href="/courses/{{_id}}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>Xem chi tiết
+                                    </a>
+                                    <div class="btn-group" role="group">
+                                        <a href="/courses/{{_id}}/edit" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                onclick="deleteCourse('{{_id}}', '{{name}}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <small>
+                                    <i class="fas fa-user me-1"></i>{{instructor}} | 
+                                    <i class="fas fa-calendar me-1"></i>{{formatDate createdAt}}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            
+            <!-- Phân trang -->
+            {{#if (gt totalPages 1)}}
+                <nav aria-label="Phân trang">
+                    <ul class="pagination justify-content-center">
+                        {{#if (gt currentPage 1)}}
+                            <li class="page-item">
+                                <a class="page-link" href="/courses?page={{subtract currentPage 1}}&search={{search}}&category={{category}}&level={{level}}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {{/if}}
+                        
+                        {{#each (range 1 totalPages)}}
+                            <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                                <a class="page-link" href="/courses?page={{this}}&search={{../search}}&category={{../category}}&level={{../level}}">
+                                    {{this}}
+                                </a>
+                            </li>
+                        {{/each}}
+                        
+                        {{#if (lt currentPage totalPages)}}
+                            <li class="page-item">
+                                <a class="page-link" href="/courses?page={{add currentPage 1}}&search={{search}}&category={{category}}&level={{level}}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {{/if}}
+                    </ul>
+                </nav>
+            {{/if}}
+        {{else}}
+            <div class="text-center py-5">
+                <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Không có khóa học nào</h4>
+                <p class="text-muted">Hãy tạo khóa học đầu tiên của bạn!</p>
+                <a href="/courses/create" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Tạo khóa học
+                </a>
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+function deleteCourse(id, name) {
+    if (confirm(`Bạn có chắc chắn muốn xóa khóa học "${name}"?`)) {
+        fetch(`/courses/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Xóa khóa học thành công!');
+                location.reload();
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi xóa khóa học');
+        });
+    }
+}
+</script>

@@ -1,0 +1,324 @@
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>Chỉnh sửa khóa học
+                </h4>
+            </div>
+            <div class="card-body">
+                <!-- Thông báo thành công -->
+                {{#if success}}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Thành công!</strong> {{success}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/if}}
+                
+                <!-- Thông báo lỗi -->
+                {{#if error}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Lỗi!</strong> {{error}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/if}}
+                
+                <!-- Form chỉnh sửa -->
+                <form action="/courses/{{course._id}}/update" method="POST" enctype="multipart/form-data" id="editCourseForm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-book me-1"></i>Tên khóa học <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control {{#if error}}is-invalid{{/if}}" 
+                                       id="name" name="name" value="{{course.name}}" required 
+                                       placeholder="Nhập tên khóa học...">
+                                <div class="invalid-feedback">
+                                    Tên khóa học là bắt buộc
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">
+                                    <i class="fas fa-align-left me-1"></i>Mô tả <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control {{#if error}}is-invalid{{/if}}" 
+                                          id="description" name="description" rows="4" required 
+                                          placeholder="Nhập mô tả khóa học...">{{course.description}}</textarea>
+                                <div class="invalid-feedback">
+                                    Mô tả khóa học là bắt buộc
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">
+                                            <i class="fas fa-money-bill me-1"></i>Giá (VNĐ)
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="price" name="price" 
+                                                   value="{{course.price}}" 
+                                                   placeholder="0" 
+                                                   data-original-value="{{course.price}}">
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Nhập số tiền (ví dụ: 1000 sẽ hiển thị 1,000)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="duration" class="form-label">
+                                            <i class="fas fa-clock me-1"></i>Thời lượng (giờ)
+                                        </label>
+                                        <input type="text" class="form-control" id="duration" name="duration" 
+                                               value="{{course.duration}}" placeholder="0">
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Nhập thời lượng (ví dụ: 2.5 hoặc 2h30p)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="category" class="form-label">
+                                    <i class="fas fa-tags me-1"></i>Danh mục
+                                </label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="programming" {{#if (eq course.category 'programming')}}selected{{/if}}>Lập trình</option>
+                                    <option value="design" {{#if (eq course.category 'design')}}selected{{/if}}>Thiết kế</option>
+                                    <option value="business" {{#if (eq course.category 'business')}}selected{{/if}}>Kinh doanh</option>
+                                    <option value="marketing" {{#if (eq course.category 'marketing')}}selected{{/if}}>Marketing</option>
+                                    <option value="other" {{#if (eq course.category 'other')}}selected{{/if}}>Khác</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="level" class="form-label">
+                                    <i class="fas fa-signal me-1"></i>Cấp độ
+                                </label>
+                                <select class="form-select" id="level" name="level">
+                                    <option value="beginner" {{#if (eq course.level 'beginner')}}selected{{/if}}>Cơ bản</option>
+                                    <option value="intermediate" {{#if (eq course.level 'intermediate')}}selected{{/if}}>Trung cấp</option>
+                                    <option value="advanced" {{#if (eq course.level 'advanced')}}selected{{/if}}>Nâng cao</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="instructor" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Giảng viên
+                                </label>
+                                <input type="text" class="form-control" id="instructor" name="instructor" 
+                                       value="{{course.instructor}}" placeholder="Tên giảng viên...">
+                            </div>
+                            
+                            <!-- Cải thiện phần hình ảnh -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-image me-1"></i>Hình ảnh
+                                </label>
+                                
+                                <!-- Hiển thị hình ảnh hiện tại -->
+                                {{#if course.image}}
+                                    <div class="mb-3">
+                                        <div class="current-image-container">
+                                            <img src="{{course.image}}" alt="Hình ảnh hiện tại" class="img-thumbnail current-image">
+                                            <div class="image-overlay">
+                                                <span class="image-label">Hình ảnh hiện tại</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/if}}
+                                
+                                <!-- Tab cho chọn hình ảnh -->
+                                <div class="image-input-tabs">
+                                    <ul class="nav nav-tabs nav-tabs-sm" id="imageTabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="file-tab" data-bs-toggle="tab" 
+                                                    data-bs-target="#file-input" type="button" role="tab">
+                                                <i class="fas fa-upload me-1"></i>Chọn file
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" 
+                                                    data-bs-target="#url-input" type="button" role="tab">
+                                                <i class="fas fa-link me-1"></i>Nhập link
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    
+                                    <div class="tab-content mt-2" id="imageTabContent">
+                                        <!-- Tab chọn file -->
+                                        <div class="tab-pane fade show active" id="file-input" role="tabpanel">
+                                            <div class="file-upload-area">
+                                                <input type="file" class="form-control" id="imageFile" name="image" 
+                                                       accept="image/*">
+                                                <div class="form-text">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Chọn file hình ảnh (JPG, PNG, GIF)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Tab nhập link -->
+                                        <div class="tab-pane fade" id="url-input" role="tabpanel">
+                                            <div class="url-input-area">
+                                                <input type="url" class="form-control" id="imageUrl" name="imageUrl" 
+                                                       placeholder="https://example.com/image.jpg">
+                                                <div class="form-text">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Nhập link hình ảnh từ internet
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Thông báo về việc thay đổi hình ảnh -->
+                                <div class="alert alert-info mt-2">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    <small>
+                                        <strong>Lưu ý:</strong> Nếu bạn chọn hình ảnh mới, hình ảnh cũ sẽ bị thay thế. 
+                                        Để giữ nguyên hình ảnh hiện tại, hãy để trống các trường trên.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/courses" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-1"></i>Cập nhật
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript để xử lý logic hình ảnh và định dạng -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageFile = document.getElementById('imageFile');
+    const imageUrl = document.getElementById('imageUrl');
+    const priceInput = document.getElementById('price');
+    const durationInput = document.getElementById('duration');
+    
+    // Xử lý định dạng tiền tệ
+    function formatCurrency(value) {
+        // Loại bỏ tất cả ký tự không phải số
+        const numericValue = value.replace(/[^\d]/g, '');
+        if (numericValue === '') return '';
+        
+        // Chuyển đổi thành số và định dạng với dấu phẩy
+        const number = parseInt(numericValue);
+        return number.toLocaleString('vi-VN');
+    }
+    
+    function parseCurrency(value) {
+        // Loại bỏ dấu phẩy và chuyển về số
+        return parseInt(value.replace(/[^\d]/g, '')) || 0;
+    }
+    
+    // Xử lý khi nhập giá tiền
+    priceInput.addEventListener('input', function() {
+        const cursorPosition = this.selectionStart;
+        const oldValue = this.value;
+        const newValue = formatCurrency(this.value);
+        
+        if (newValue !== oldValue) {
+            this.value = newValue;
+            
+            // Giữ vị trí con trỏ
+            const newCursorPosition = cursorPosition + (newValue.length - oldValue.length);
+            this.setSelectionRange(newCursorPosition, newCursorPosition);
+        }
+    });
+    
+    // Xử lý khi focus vào ô giá tiền
+    priceInput.addEventListener('focus', function() {
+        // Chọn toàn bộ text khi focus
+        this.select();
+    });
+    
+    // Xử lý khi submit form
+    const form = document.getElementById('editCourseForm');
+    form.addEventListener('submit', function(e) {
+        console.log(' Form submitting...');
+        
+        // Kiểm tra hình ảnh
+        const hasFile = imageFile.files.length > 0;
+        const hasUrl = imageUrl.value.trim() !== '';
+        
+        if (hasFile && hasUrl) {
+            e.preventDefault();
+            alert('Vui lòng chỉ chọn một cách: hoặc chọn file, hoặc nhập link URL!');
+            return false;
+        }
+        
+        // Cập nhật giá tiền trước khi submit
+        const currentPrice = parseCurrency(priceInput.value);
+        
+        // Cập nhật giá trị của input thay vì tạo input mới
+        priceInput.value = currentPrice;
+        
+        console.log('📤 Form data being sent:', {
+            name: document.getElementById('name').value,
+            description: document.getElementById('description').value,
+            price: currentPrice,
+            duration: durationInput.value,
+            category: document.getElementById('category').value,
+            level: document.getElementById('level').value,
+            instructor: document.getElementById('instructor').value,
+            hasFile: hasFile,
+            hasUrl: hasUrl
+        });
+        
+        // Không cần preventDefault, để form submit bình thường
+    });
+    
+    // Xử lý hình ảnh
+    imageFile.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            imageUrl.value = '';
+        }
+    });
+    
+    imageUrl.addEventListener('input', function() {
+        if (this.value.trim() !== '') {
+            imageFile.value = '';
+        }
+    });
+    
+    // Khởi tạo giá trị ban đầu cho giá tiền
+    if (priceInput.value) {
+        priceInput.value = formatCurrency(priceInput.value);
+    }
+    
+    // Auto-hide success message sau 5 giây
+    const successAlert = document.querySelector('.alert-success');
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.classList.remove('show');
+            setTimeout(() => {
+                successAlert.remove();
+            }, 150);
+        }, 5000);
+    }
+    
+    console.log('✅ Edit form JavaScript loaded successfully');
+});
+</script>

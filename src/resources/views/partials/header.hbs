@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-graduation-cap me-2"></i>
+            Quản lý khóa học
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {{#if (eq currentPage 'home')}}active{{/if}}" href="/">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{#if (eq currentPage 'courses')}}active{{/if}}" href="/courses">
+                        <i class="fas fa-book me-1"></i>Khóa học
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{#if (eq currentPage 'create')}}active{{/if}}" href="/courses/create">
+                        <i class="fas fa-plus me-1"></i>Tạo khóa học
+                    </a>
+                </li>
+            </ul>
+            
+            <form class="d-flex" action="/courses" method="GET">
+                <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm khóa học..." 
+                       value="{{search}}" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
